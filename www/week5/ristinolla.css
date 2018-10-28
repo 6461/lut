@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+
+main {
+  margin: 0 auto;
+  width: 22em;
+  max-width: 90%;
+  color: #2c3e50;
+  font-family: 'Sedgwick Ave', cursive;
+}
+
+table {
+  margin: 0 auto;
+}
+
+tr {
+  height: 6em;
+  line-height: 6em;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0;
+  user-select: none;
+}
+
+.space {
+  border: 0.2em solid #d35400;
+  width: 6em;
+  line-height: 1em;
+}
+
+td:hover {
+  background-color: #d35400;
+}
+
+#grid {
+  background-color: #f1c40f;
+  font-size: 1em;
+  padding: 2em 0;
+}
+
+#noteheader {
+  background-color: #f39c12;
+  height: 2em;
+  line-height: 2em;
+  margin-top: 2em;
+  border-bottom: 0.2em solid #d35400;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  padding-left: 1em;
+  vertical-align: middle;
+}
+
+#notefooter {
+  background-color: #f39c12;
+  height: 2em;
+  line-height: 2em;
+  border-top: 0.2em solid #d35400;
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  text-align: right;
+  padding-right: 1em;
+  vertical-align: middle;
+}
