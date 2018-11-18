@@ -22,10 +22,10 @@ AuthorSchema.virtual('name')
 
 AuthorSchema.virtual('lifespan')
 	.get(function() {
-		// var dob = moment(this.date_of_birth).format('YYYY');
-		// var dod = moment(this.date_of_death).format('YYYY');
-		// return dob + ' - ' + dod;
-		return (this.date_of_death.getYear() - this.date_of_birth.getYear()).toString();
+		// return (this.date_of_death.getYear() - this.date_of_birth.getYear()).toString();
+		var birth = this.date_of_birth ? moment(this.date_of_birth).format('YYYY') : '';
+		var death = this.date_of_death ? moment(this.date_of_death).format('YYYY') : '';
+		return birth + ' - ' + death;
 });
 
 AuthorSchema.virtual('url')
