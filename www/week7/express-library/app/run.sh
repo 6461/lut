@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+# Populate database with test data
 node populatedb mongodb://mongo:27017
-sleep 30
-DEBUG=express-library:* npm run devstart
+# Debug mode
+#DEBUG=express-library:* npm run devstart
+# normal start
+npm start
