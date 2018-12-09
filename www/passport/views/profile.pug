@@ -1,25 +1,15 @@
-doctype html
-html
-  head
-    title Node Authentication
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
-    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
-    style.
-      body        { padding-top:80px; word-wrap:break-word; }
-  body
-    .container
-      .page-header.text-center
-        h1
-          span.fa.fa-anchor
-          |  Profile Page
-        a.btn.btn-default.btn-sm(href='/logout') Logout
-      .row
-        // LOCAL INFORMATION
-        .col-sm-6
-          .well
-            h3
-              span.fa.fa-user
-              |  Local
-            p #[strong id:] #{user._id}
-            p #[strong email:] #{user.local.email}
-            p #[strong password:] #{user.local.password}
+extends layout
+
+block content
+  #app.container
+    h1 #{title}
+    .row
+      // LOCAL INFORMATION
+      h3 User information
+      p #[strong id:] #{user._id}
+      p #[strong email:] #{user.local.email}
+      p #[strong password:] #{user.local.password}
+    .row
+      a.btn-small.waves-effect.waves-light.blue(href='/logout')
+        i.material-icons.left exit_to_app
+        | Logout

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  #app.container
+    h1 #{title}
+    .row
+      form.col.s12.l6(v-on:submit.prevent='addItem')
+        .input-field
+          input(type='text', v-model='itemName', placeholder='Add an item', maxlength='100', required='')
+        .input-field
+          button.btn.waves-effect.waves-light.blue
+            | Add
+            i.material-icons.left add_circle
+    .row
+      ul.collection.col.s12.l6
+        li(is='shop-item', v-for='(item, index) in items', v-bind:key='index', v-bind:title='item.name', v-on:remove='removeItem(index)')
+    div(v-if='!items.length') The list is empty!
+  script(src='/javascripts/list.js')
