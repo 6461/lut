@@ -1,3 +1,7 @@
 .btn-fix {
   margin-top: -6px;
 }
+
+.btn-small {
+  margin-right: 1em;
+}

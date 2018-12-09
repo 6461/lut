@@ -24,10 +24,9 @@ block content
           i.material-icons.left create
     .row
       hr
-      p
-        | Already have an account? 
-        a(href='/login') Login
-      p
-        | Or go 
-        a(href='/') home
-        | .
+      a.btn-small.waves-effect.waves-light.grey(href='/')
+              i.material-icons.left home
+              | Home page
+      a.btn-small.waves-effect.waves-light.grey(href='/login')
+              i.material-icons.left account_circle
+              | Login

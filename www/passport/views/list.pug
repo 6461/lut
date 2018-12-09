@@ -15,4 +15,17 @@ block content
       ul.collection.col.s12.l6
         li(is='shop-item', v-for='(item, index) in items', v-bind:key='index', v-bind:title='item.name', v-on:remove='removeItem(index)')
     div(v-if='!items.length') The list is empty!
+    .row
+      p #{user.local.email}
+    .row
+      a.btn-small.waves-effect.waves-light.grey(href='/')
+              i.material-icons.left home
+              | Home page
+      a.btn-small.waves-effect.waves-light.grey(href='/profile')
+              i.material-icons.left account_circle
+              | Profile
+      a.btn-small.waves-effect.waves-light.grey(href='/logout')
+              i.material-icons.left exit_to_app
+              | Logout
+append footer
   script(src='/javascripts/list.js')

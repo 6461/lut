@@ -1,4 +1,8 @@
 // app/routes.js
+
+// require controller
+var itemController = require('../controllers/itemController');
+
 module.exports = function(app, passport) {
 
     // =====================================
@@ -20,7 +24,7 @@ module.exports = function(app, passport) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/list',
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -37,7 +41,7 @@ module.exports = function(app, passport) {
 
 	// process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/list', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -58,6 +62,23 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+	
+	// render shopping list page
+	app.get('/list', isLoggedIn, function(req, res) {
+		res.render('list', {title: 'Shopping list', user: req.user});
+    });
+	
+	// GET request for list of all items
+	app.get('/item/list', isLoggedIn, itemController.item_list);
+
+	// POST request for creating an item
+	app.post('/item/create', isLoggedIn, itemController.item_create);
+
+	// POST request to delete item
+	app.post('/item/delete', isLoggedIn, itemController.item_delete);
+
+	// GET request for one item
+	app.get('/item/:id', isLoggedIn, itemController.item_get);
 };
 
 // route middleware to make sure a user is logged in
