@@ -33,7 +33,11 @@ var vm = new Vue({
 		  console.log(error);
 		  this.errored = true;
 	  })
-      .finally(() => this.loading = false);
+      .finally(() => {
+		  setTimeout(function() {
+			  this.loading = false;
+		  }.bind(this), 1000);
+      });
   },
 
   methods: {

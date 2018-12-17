@@ -10,6 +10,6 @@ do
 done
 
 # Debug mode
-DEBUG=ajax-list:* npm run devstart
+#DEBUG=ajax-list:* npm run devstart
 # normal start
-#npm start
+npm start
