@@ -1,0 +1,57 @@
+extends layout
+
+block content
+  #app.container
+    h1 #{title}
+    .row
+      form(action='', method='POST')
+        .row
+          .input-field.col.s12
+            input#name(type='text', name='name', required='true', value=(undefined===meme ? '' : meme.name))
+            label(for='name') Name
+        .row
+          .input-field.col.s12
+            input#width(type='number', name='width', required='true', value=(undefined===meme ? '' : meme.width))
+            label(for='width') Width
+        .row
+          .input-field.col.s12
+            input#height(type='number', name='height', required='true', value=(undefined===meme ? '' : meme.height))
+            label(for='height') Height
+        .row
+          .input-field.col.s12
+            input#background_color(type='text', name='background_color', required='true', value=(undefined===meme ? '' : meme.background_color))
+            label(for='background_color') Background color
+        .row
+          .input-field.col.s12
+            input#font_size(type='number', name='font_size', required='true', value=(undefined===meme ? '' : meme.font_size))
+            label(for='font_size') Font size
+        .row
+          .input-field.col.s12
+            input#font_color(type='text', name='font_color', required='true', value=(undefined===meme ? '' : meme.font_color))
+            label(for='font_color') Font color
+        .row
+          .input-field.col.s12
+            input#text_x(type='number', name='text_x', required='true', value=(undefined===meme ? '' : meme.text_x))
+            label(for='text_x') Horizontal text position (X)
+        .row
+          .input-field.col.s12
+            input#text_y(type='number', name='text_y', required='true', value=(undefined===meme ? '' : meme.text_y))
+            label(for='text_y') Vertical text position (Y)
+        .row
+          .input-field.col.s12
+            input#caption(type='text', name='caption', required='true', value=(undefined===meme ? '' : meme.caption))
+            label(for='caption') Text
+        button.btn-small.waves-effect.waves-light.blue(type='submit', name='action')
+          | Submit
+          i.material-icons.left add_circle
+    .row
+      hr
+      a.btn-small.waves-effect.waves-light.grey(href='/')
+        i.material-icons.left home
+        | Home page
+      a.btn-small.waves-effect.waves-light.grey(href='/profile')
+        i.material-icons.left account_circle
+        | Profile
+      a.btn-small.waves-effect.waves-light.grey(href='/logout')
+        i.material-icons.left exit_to_app
+        | Logout
