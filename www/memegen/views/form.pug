@@ -1,8 +1,6 @@
 extends layout
 
 block content
-  #app.container
-    h1 #{title}
     .row
       form(action='', method='POST')
         .row
@@ -10,11 +8,10 @@ block content
             input#name(type='text', name='name', required='true', value=(undefined===meme ? '' : meme.name))
             label(for='name') Name
         .row
-          .input-field.col.s12
+          .input-field.col.s6
             input#width(type='number', name='width', required='true', value=(undefined===meme ? '' : meme.width))
             label(for='width') Width
-        .row
-          .input-field.col.s12
+          .input-field.col.s6
             input#height(type='number', name='height', required='true', value=(undefined===meme ? '' : meme.height))
             label(for='height') Height
         .row
@@ -23,35 +20,47 @@ block content
             label(for='background_color') Background color
         .row
           .input-field.col.s12
-            input#font_size(type='number', name='font_size', required='true', value=(undefined===meme ? '' : meme.font_size))
-            label(for='font_size') Font size
+            input#image_url(type='text', name='image_url', required='true', value=(undefined===meme ? '' : meme.image_url))
+            label(for='image_url') Image URL
         .row
-          .input-field.col.s12
-            input#font_color(type='text', name='font_color', required='true', value=(undefined===meme ? '' : meme.font_color))
-            label(for='font_color') Font color
+          .input-field.col.s6
+            input#image_width(type='number', name='image_width', required='true', value=(undefined===meme ? '' : meme.image_width))
+            label(for='image_width') Image width
+          .input-field.col.s6
+            input#image_height(type='number', name='image_height', required='true', value=(undefined===meme ? '' : meme.image_height))
+            label(for='image_height') Image height
         .row
-          .input-field.col.s12
-            input#text_x(type='number', name='text_x', required='true', value=(undefined===meme ? '' : meme.text_x))
-            label(for='text_x') Horizontal text position (X)
-        .row
-          .input-field.col.s12
-            input#text_y(type='number', name='text_y', required='true', value=(undefined===meme ? '' : meme.text_y))
-            label(for='text_y') Vertical text position (Y)
+          .input-field.col.s6
+            input#image_x(type='number', name='image_x', required='true', value=(undefined===meme ? '' : meme.image_x))
+            label(for='image_x') Image position (X)
+          .input-field.col.s6
+            input#image_y(type='number', name='image_y', required='true', value=(undefined===meme ? '' : meme.image_y))
+            label(for='image_y') Image position (Y)
         .row
           .input-field.col.s12
             input#caption(type='text', name='caption', required='true', value=(undefined===meme ? '' : meme.caption))
             label(for='caption') Text
+        .row
+          .input-field.col.s6
+            input#font_size(type='number', name='font_size', required='true', value=(undefined===meme ? '' : meme.font_size))
+            label(for='font_size') Font size
+          .input-field.col.s6
+            input#font_color(type='text', name='font_color', required='true', value=(undefined===meme ? '' : meme.font_color))
+            label(for='font_color') Font color
+        .row
+          .input-field.col.s6
+            input#text_x(type='number', name='text_x', required='true', value=(undefined===meme ? '' : meme.text_x))
+            label(for='text_x') Text position (X)
+          .input-field.col.s6
+            input#text_y(type='number', name='text_y', required='true', value=(undefined===meme ? '' : meme.text_y))
+            label(for='text_y') Text position (Y)
         button.btn-small.waves-effect.waves-light.blue(type='submit', name='action')
-          | Submit
+          | Save
           i.material-icons.left add_circle
     .row
-      hr
-      a.btn-small.waves-effect.waves-light.grey(href='/')
-        i.material-icons.left home
-        | Home page
-      a.btn-small.waves-effect.waves-light.grey(href='/profile')
+      a.btn-small.waves-effect.waves-light.blue(href='/profile')
         i.material-icons.left account_circle
         | Profile
-      a.btn-small.waves-effect.waves-light.grey(href='/logout')
+      a.btn-small.waves-effect.waves-light.blue(href='/logout')
         i.material-icons.left exit_to_app
         | Logout

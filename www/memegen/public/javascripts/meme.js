@@ -3,18 +3,13 @@
 Vue.component(
   'list', {
     template: '\
-      <li class="collection-item">\
-        <div class="row valign-wrapper">\
-          <div class="col s10">{{ name }}</div>\
-		  <div class="col s2 secondary-content">\
-            <a v-on:click="$emit(\'remove\')" class="btn-flat waves-effect waves-purple red">Remove\
-              <i class="material-icons left">remove_circle</i>\
-		    </a>\
-		  </div>\
-        </div>\
-      </li>\
-    ',
-    props: ['name']
+    <li class="collection-item avatar">\
+      <i class="material-icons circle">folder</i>\
+      <span class="title">{{ meme.name }}</span>\
+      <p>{{ meme.date }}<br>{{ meme.caption }}</p>\
+      <a href="#!" class="secondary-content" v-on:click="$emit(\'remove\')"><i class="material-icons">delete_forever</i></a>\
+    </li>',
+    props: ['meme']
 })
 
 var vm = new Vue({
@@ -29,7 +24,9 @@ var vm = new Vue({
   mounted() {
     axios
       .get('/meme/list')
-      .then(response => {this.meme_list = response.data})
+      .then(response => {
+		  this.meme_list = response.data;
+	  })
       .catch(error => {
 		  console.log(error);
 		  this.errored = true;

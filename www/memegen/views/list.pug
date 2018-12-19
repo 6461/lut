@@ -1,12 +1,10 @@
 extends layout
 
 block content
-  #app.container
-    h1 #{title}
     .row(v-if='!meme_list.length') No memes for you!
     .row(v-else)
-      ul.collection.col.s12.l6
-        li(is='list', v-for='(meme, index) in meme_list', v-bind:key='index', v-bind:name='meme.name', v-on:remove='removeMeme(index)')
+      ul.collection
+        li(is='list', v-for='(meme, index) in meme_list', v-bind:key='index', v-bind:meme='meme', v-on:remove='removeMeme(index)')
     .row
       a.btn-small.waves-effect.waves-light.grey(href='/meme/create')
         i.material-icons.left add_circle

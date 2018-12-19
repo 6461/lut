@@ -63,9 +63,9 @@ module.exports = function(app, passport) {
         res.redirect('/');
     });
 	
-	// render shopping list page
+	// render list page
 	app.get('/list', isLoggedIn, function(req, res) {
-		res.render('list', {title: 'Meme generator', user: req.user});
+		res.render('list', {title: 'List of memes', user: req.user});
     });
 	
 	// GET request for list of all items
