@@ -10,9 +10,6 @@ var flash    = require('connect-flash');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-
 var app = express();
 
 // set up database connection with mongoose

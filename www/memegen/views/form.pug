@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    h2 #{title}
     .row
       form(action='', method='POST')
         .row
@@ -58,9 +59,6 @@ block content
           | Save
           i.material-icons.left add_circle
     .row
-      a.btn-small.waves-effect.waves-light.blue(href='/profile')
-        i.material-icons.left account_circle
-        | Profile
-      a.btn-small.waves-effect.waves-light.blue(href='/logout')
-        i.material-icons.left exit_to_app
-        | Logout
+      a.btn-small.waves-effect.waves-light.blue(href='/')
+        i.material-icons.left arrow_back
+        | Back to app

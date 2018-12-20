@@ -5,7 +5,11 @@ const Meme = require('../models/memeModel');
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
-exports.meme_list = function(req, res, next) {
+// API functions (api_*) return JSON objects
+// Exception: api_get_svg returns plaintext svg
+// NAVI functions (navi_*) render pages with Express
+
+exports.api_get_list = function(req, res, next) {
 	Meme.find()
 	.exec(function (err, list) {
 		if (err) {
@@ -18,49 +22,73 @@ exports.meme_list = function(req, res, next) {
 	});
 };
 
-exports.meme_get = function(req, res, next) {
-	Meme.findById(req.params.id)
-	.exec(function (err, meme) {
+exports.api_get_delete = function(req, res, next) {
+	Meme.findByIdAndRemove(req.params.id, function deleteMeme(err) {
 		if (err) {
-			res.status(500).send({error: 'Error getting meme'});
+			res.status(500).send({error: 'Error deleting meme'});
 			return next(err);
 		} else {
 			// Successful
-			res.status(200).json(meme);
+			res.json({success: true});
 		}
 	});
 };
 
-exports.meme_svg = function(req, res, next) {
+exports.api_get_svg = function(req, res, next) {
 	Meme.findById(req.params.id)
-	.exec(function (err, meme) {
+	.exec(function (err, m) {
 		if (err) {
-			res.status(500).send({error: 'Error getting meme'});
 			return next(err);
-		} else {
-			// Successful
-			// meme.background_color = unescape(meme.background_color);
-			// meme.image_url = unescape(meme.image_url);
-			// meme.font_color = unescape(meme.font_color);
-			// meme.caption = unescape(meme.caption);
-let meme_svg = '<svg width="' + meme.width + '" height="' + meme.height + '" xmlns="http://www.w3.org/2000/svg" version="1.1">\n';
-meme_svg += '<style>\n';
-meme_svg += '.txt {font: normal normal bold ' + meme.font_size + 'px sans-serif; fill: ' + meme.font_color + ';}\n';
-meme_svg += '</style>\n';
-meme_svg += '<rect width="100%" height="100%" fill="' + meme.background_color + '" />\n';
-meme_svg += '<image href="' + meme.image_url + '" width="' + meme.image_width + '" height="' + meme.image_height + '" x="' + meme.image_x + '" y="' + meme.image_y + '" />\n';
-meme_svg += '<text x="' + meme.text_x + '" y="' + meme.text_y + '" class="txt">' + meme.caption + '</text>\n';
-meme_svg += '</svg>';
-			res.send(meme_svg);
 		}
+		if (m == null) {
+			var err = new Error('Meme not found');
+			err.status = 404;
+			return next(err);
+		}
+		// Successful
+		// m is Meme
+		// svg is rendered svg file
+		let svg = '<svg viewBox="0 0 ' + m.width + ' ' + m.height + '" ';
+		svg += 'xmlns="http://www.w3.org/2000/svg" version="1.1">\n';
+		svg += '<style>\n';
+		svg += '.txt {font: normal normal bold ' + m.font_size;
+		svg += 'px sans-serif; fill: ' + m.font_color + ';}\n';
+		svg += '</style>\n';
+		svg += '<rect width="100%" height="100%" fill="';
+		svg += m.background_color + '" />\n';
+		svg += '<image href="' + m.image_url + '" width="';
+		svg += m.image_width + '" height="' + m.image_height;
+		svg += '" x="' + m.image_x + '" y="' + m.image_y + '" />\n';
+		svg += '<text x="' + m.text_x + '" y="' + m.text_y;
+		svg += '" class="txt">' + m.caption + '</text>\n';
+		svg += '</svg>';
+		// send plaintext SVG
+		res.type('image/svg+xml');
+		res.send(svg);
 	});
 };
 
-exports.meme_create_form = function(req, res, next) {
+exports.navi_get_meme = function(req, res, next) {
+	Meme.findById(req.params.id)
+	.exec(function (err, meme) {
+		if (err) {
+			return next(err);
+		}
+		if (meme == null) {
+			var err = new Error('Meme not found');
+			err.status = 404;
+			return next(err);
+		}
+		// Successful
+		res.render('meme', {meme: meme});
+	});
+};
+
+exports.navi_get_create = function(req, res, next) {
 	res.render('form', {title: 'Create meme'});
 };
 
-exports.meme_create =  [
+exports.navi_post_create =  [
 	// Validate fields.
 	body('name', 'Meme name required').isLength({ min: 1 }).trim(),
 	body('width').isNumeric(),
@@ -69,12 +97,8 @@ exports.meme_create =  [
 	body('image_url', 'Image URL required').isLength({ min: 1 }).trim(),
 	body('image_width').isNumeric(),
 	body('image_height').isNumeric(),
-	// body('image_x').isNumeric(),
-	// body('image_y').isNumeric(),
 	body('font_size').isNumeric(),
 	body('font_color', 'Font color required').isLength({ min: 1 }).trim(),
-	// body('text_x').isNumeric(),
-	// body('text_y').isNumeric(),
 	body('caption', 'Caption required').isLength({ min: 1 }).trim(),
 	
 	// Sanitize fields.
@@ -109,24 +133,27 @@ exports.meme_create =  [
 		
 		if (!errors.isEmpty()) {
 			// There are errors.
-			res.status(500).send({error: 'Error creating meme'});
-			return;
+			// res.status(500).send({error: 'Error creating meme'});
+			var err = new Error('Error creating meme');
+			err.status = 500;
+			return next(err);
 		} else {
 			// Data from form is valid.
 			meme.save(function (err) {
 				if (err) {
-					res.status(500).send({error: 'Error creating meme'});
+					// res.status(500).send({error: 'Error creating meme'});
 					return next(err);
 				} else {
 					// Successful
-					res.status(200).json(meme);
+					// res.status(200).json(meme);
+					res.redirect(meme.url);
 				}
 			});
 		}
 	}
 ];
 
-exports.meme_update_form = function(req, res, next) {
+exports.navi_get_update = function(req, res, next) {
 	Meme.findById(req.params.id)
 	.exec(function (err, meme) {
 		if (err) {
@@ -138,15 +165,11 @@ exports.meme_update_form = function(req, res, next) {
 			return next(err);
 		}
 		// Successful
-		// meme.background_color = unescape(meme.background_color);
-		// meme.image_url = unescape(meme.image_url);
-		// meme.font_color = unescape(meme.font_color);
-		// meme.caption = unescape(meme.caption);
 		res.render('form', {title: 'Update meme', meme: meme});
 	});
 };
 
-exports.meme_update =  [
+exports.navi_post_update =  [
 	// Validate fields.
 	body('name', 'Meme name required').isLength({ min: 1 }).trim(),
 	body('width').isNumeric(),
@@ -155,12 +178,8 @@ exports.meme_update =  [
 	body('image_url', 'Image URL required').isLength({ min: 1 }).trim(),
 	body('image_width').isNumeric(),
 	body('image_height').isNumeric(),
-	// body('image_x').isNumeric(),
-	// body('image_y').isNumeric(),
 	body('font_size').isNumeric(),
 	body('font_color', 'Font color required').isLength({ min: 1 }).trim(),
-	// body('text_x').isNumeric(),
-	// body('text_y').isNumeric(),
 	body('caption', 'Caption required').isLength({ min: 1 }).trim(),
 	
 	// Sanitize fields.
@@ -196,31 +215,22 @@ exports.meme_update =  [
 
 		if (!errors.isEmpty()) {
 			// There are errors.
-			res.status(500).send({error: 'Error updating meme'});
-			return;
+			// res.status(500).send({error: 'Error updating meme'});
+			var err = new Error('Error creating meme');
+			err.status = 500;
+			return next(err);
 		} else {
 			// Data from form is valid. Update.
 			Meme.findByIdAndUpdate(req.params.id, meme, {}, function (err, thememe) {
 				if (err) {
-					res.status(500).send({error: 'Error updating meme'});
+					// res.status(500).send({error: 'Error updating meme'});
 					return next(err);
 				} else {
 					// Successful
-					res.status(200).json(meme);
+					// res.status(200).json(meme);
+					res.redirect(meme.url);
 				}
 			});
 		}
 	}
 ];
-
-exports.meme_delete = function(req, res, next) {
-	Meme.findByIdAndRemove(req.params.id, function deleteMeme(err) {
-		if (err) {
-			res.status(500).send({error: 'Error deleting meme'});
-			return next(err);
-		} else {
-			// Successful
-			res.json({success: true});
-		}
-	});
-};

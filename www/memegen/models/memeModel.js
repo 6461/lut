@@ -2,6 +2,7 @@
 
 /* https://mongoosejs.com/docs/schematypes.html */
 
+var moment = require('moment');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -75,6 +76,7 @@ var MemeSchema = new Schema({
 		min:		1,
 		max:		9999},
 	/* Use the name "caption" instead of "text" to be safe */
+	/* "text" is not a reserved word but may cause problems */
 	caption: {
 		type:		String,
 		required:	true,
@@ -87,10 +89,15 @@ MemeSchema.virtual('url')
 		return '/meme/' + this._id;
 });
 
+MemeSchema.virtual('svg_url')
+	.get(function() {
+		return '/meme/' + this._id + '/svg';
+});
+
 MemeSchema.virtual('date_formatted')
 	.get(function() {
-		let datef = this.date ? moment(this.date).format('D.M.YYYY HH.mm') : '';
-		return datef;
+		let df = this.date ? moment(this.date).format('D.M.YYYY HH.mm') : '';
+		return df;
 });
 
 module.exports = mongoose.model('Meme', MemeSchema);

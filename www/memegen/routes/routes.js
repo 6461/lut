@@ -1,17 +1,21 @@
 // app/routes.js
 
-// require controller
+// Require controller
 var memeController = require('../controllers/memeController');
 
 module.exports = function(app, passport) {
 
     // =====================================
-    // HOME PAGE (with login links) ========
+    // HOME PAGE
     // =====================================
-    app.get('/', function(req, res) {
-		res.render('index', {title: 'Home'});
+    app.get('/', isLoggedIn, function(req, res) {
+		res.render('index');
     });
-
+	
+	app.get('/welcome', function(req, res) {
+		res.render('welcome', {title: 'Welcome'});
+    });
+	
     // =====================================
     // LOGIN ===============================
     // =====================================
@@ -24,7 +28,7 @@ module.exports = function(app, passport) {
 
     // process the login form
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/list',
+        successRedirect : '/',
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -41,7 +45,7 @@ module.exports = function(app, passport) {
 
 	// process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/list', // redirect to the secure profile section
+        successRedirect : '/',
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -60,37 +64,37 @@ module.exports = function(app, passport) {
     // =====================================
     app.get('/logout', function(req, res) {
         req.logout();
-        res.redirect('/');
+        res.redirect('/welcome');
     });
 	
 	// render list page
-	app.get('/list', isLoggedIn, function(req, res) {
-		res.render('list', {title: 'List of memes', user: req.user});
-    });
+	// app.get('/', isLoggedIn, function(req, res) {
+		// res.render('list', {title: 'List of memes', user: req.user});
+    // });
 	
 	// GET request for list of all items
-	app.get('/meme/list', isLoggedIn, memeController.meme_list);
+	app.get('/meme/list', isLoggedIn, memeController.api_get_list);
 	
 	// GET request for creating an item
-	app.get('/meme/create', isLoggedIn, memeController.meme_create_form);
+	app.get('/meme/create', isLoggedIn, memeController.navi_get_create);
 	
 	// POST request for creating an item
-	app.post('/meme/create', isLoggedIn, memeController.meme_create);
+	app.post('/meme/create', isLoggedIn, memeController.navi_post_create);
 	
 	// GET request to delete item
-	app.get('/meme/:id/delete', isLoggedIn, memeController.meme_delete);
+	app.get('/meme/:id/delete', isLoggedIn, memeController.api_get_delete);
 	
 	// GET request for SVG
-	app.get('/meme/:id/svg', isLoggedIn, memeController.meme_svg);
+	app.get('/meme/:id/svg', isLoggedIn, memeController.api_get_svg);
 	
 	// GET request to update item
-	app.get('/meme/:id/update', isLoggedIn, memeController.meme_update_form);	
+	app.get('/meme/:id/update', isLoggedIn, memeController.navi_get_update);	
 	
 	// POST request to update item
-	app.post('/meme/:id/update', isLoggedIn, memeController.meme_update);
+	app.post('/meme/:id/update', isLoggedIn, memeController.navi_post_update);
 	
 	// GET request for one item
-	app.get('/meme/:id', isLoggedIn, memeController.meme_get);
+	app.get('/meme/:id', isLoggedIn, memeController.navi_get_meme);
 };
 
 // route middleware to make sure a user is logged in
@@ -101,5 +105,5 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    res.redirect('/welcome');
 }
