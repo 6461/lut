@@ -9,6 +9,11 @@ do
 	sleep 1
 done
 
+# Unit tests
+npm test
+echo "Waiting 10 seconds..."
+sleep 10
+
 # Debug mode
 #DEBUG=ajax-list:* npm run devstart
 # normal start
