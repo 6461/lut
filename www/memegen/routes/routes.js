@@ -1,4 +1,4 @@
-// app/routes.js
+"use strict";
 
 // Require controller
 var memeController = require('../controllers/memeController');
@@ -93,9 +93,18 @@ module.exports = function(app, passport) {
 	
 	// GET request to delete item
 	app.get('/meme/:id/delete', isLoggedIn, memeController.api_get_delete);
+
+	// GET request for JSON
+	app.get('/meme/:id/json', isLoggedIn, memeController.api_get_json);
 	
 	// GET request for SVG
-	app.get('/meme/:id/svg', isLoggedIn, memeController.api_get_svg);
+	app.get('/meme/:id/svg', isLoggedIn, memeController.file_get_svg);
+	
+	// GET request for SVG (download)
+	app.get('/meme/:id/svg_download', isLoggedIn, memeController.file_get_svg_download);
+	
+	// GET request for PDF
+	app.get('/meme/:id/pdf', isLoggedIn, memeController.file_get_pdf);
 	
 	// GET request to update item
 	app.get('/meme/:id/update', isLoggedIn, memeController.navi_get_update);	
