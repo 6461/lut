@@ -3,7 +3,8 @@ extends layout
 block content
     h2 #{meme.name}
     .row
-      object(class='responsive-img', data=meme.svg_url, type='image/svg+xml')
+      .col.s12.l6
+        object(class='responsive-img', data=meme.svg_url, type='image/svg+xml')
     .row
       a.btn-small.waves-effect.waves-light.blue(href=meme.url + '/update')
         i.material-icons.left edit

@@ -49,7 +49,7 @@ module.exports = function(app, passport) {
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
-
+	
     // =====================================
     // PROFILE SECTION =====================
     // =====================================
@@ -58,7 +58,22 @@ module.exports = function(app, passport) {
     app.get('/profile', isLoggedIn, function(req, res) {
 		res.render('profile', {title: 'Profile page', user: req.user});
     });
-
+	
+    // =====================================
+    // FACEBOOK ROUTES =====================
+    // =====================================
+    // route for facebook authentication and login
+    app.get('/auth/facebook', passport.authenticate('facebook', { 
+      scope : ['email']
+    }));
+	
+    // handle the callback after facebook has authenticated the user
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', {
+            successRedirect : '/',
+            failureRedirect : '/welcome'
+        }));
+		
     // =====================================
     // LOGOUT ==============================
     // =====================================
@@ -66,11 +81,6 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/welcome');
     });
-	
-	// render list page
-	// app.get('/', isLoggedIn, function(req, res) {
-		// res.render('list', {title: 'List of memes', user: req.user});
-    // });
 	
 	// GET request for list of all items
 	app.get('/meme/list', isLoggedIn, memeController.api_get_list);
